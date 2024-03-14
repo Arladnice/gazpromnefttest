@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Table, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -8,11 +8,12 @@ import { setSelectedData } from '../store/dataSlice';
 import { openModal } from '../store/modalSlice';
 import styled from 'styled-components';
 
-const Box = styled.div<{ $primary?: boolean }>`
+const Box = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 10px;
+    height: 30px;
 `;
 
 const columns: ColumnsType<IData> = [
@@ -56,16 +57,22 @@ const TableItems: React.FC = () => {
     const [selectedRows, setSelectedRows] = useState<IData[]>([]);
     const dispatch = useDispatch();
 
-    const rowSelection = {
-        onChange: (_selectedRowKeys: React.Key[], selectedRows: IData[]) => {
-            setSelectedRows(selectedRows);
-        },
-    };
+    const rowSelection = useMemo(
+        () => ({
+            onChange: (
+                _selectedRowKeys: React.Key[],
+                selectedRows: IData[],
+            ) => {
+                setSelectedRows(selectedRows);
+            },
+        }),
+        [],
+    );
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
         dispatch(setSelectedData(selectedRows));
         dispatch(openModal());
-    };
+    }, [dispatch, selectedRows]);
 
     useEffect(() => {
         if (selectedRows.length !== 0) {

@@ -6,6 +6,7 @@ import { CANCEL_URL } from '../utils/constants';
 import type { IData } from '../types/dataType';
 import type { RootState } from '../store';
 import axios from 'axios';
+import { useMemo } from 'react';
 
 export const Modal: React.FC = () => {
     const modalIsOpened = useSelector(
@@ -43,9 +44,7 @@ export const Modal: React.FC = () => {
         dispatch(closeModal());
     };
 
-    const getItemsList = () => {
-        return selectedData.map((item: IData) => item.name).join(', ');
-    };
+    const itemsList = useMemo(() => selectedData.map((item: IData) => item.name).join(', '), [selectedData]);
 
     return (
         <>
@@ -60,7 +59,7 @@ export const Modal: React.FC = () => {
                 okText='Применить'
                 cancelText='Отклонить'
             >
-                <Typography.Text>{getItemsList()}</Typography.Text>
+                <Typography.Text>{itemsList}</Typography.Text>
             </ModalAntd>
         </>
     );

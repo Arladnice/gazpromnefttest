@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import TableItems from '../components/TableItems';
 import { Modal } from '../components/Modal';
 
-const Layout = styled.main<{ $primary?: boolean }>`
+const Layout = styled.main`
     max-width: 1080px;
     margin: 0 auto;
     display: flex;
